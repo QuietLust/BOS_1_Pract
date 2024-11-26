@@ -1,0 +1,26 @@
+#!/bin/bash
+print_help() {
+    echo "Usage: $0 [OPTIONS]"
+    echo "Options:"
+    echo "  -u, --users         Выводит перечень пользователей и их домашних директорий"
+    echo "  -p, --processes     Выводит перечень запущенных процессов"
+    echo "  -h, --help          Выводит справку"
+    echo "  -l, --log PATH      Замещает вывод на экран выводом в файл по заданному пути PATH"
+    echo "  -e, --errors PATH   Замещает вывод ошибок из потока stderr в файл по заданному пути PATH"
+}
+
+list_users() {
+    cut -d: -f1,6 /etc/passwd | sort
+}
+
+list_processes() {
+    ps -e -o pid,comm | sort -n
+}
+
+check_path() {
+    local path="$1"
+    if [ ! -w "$path" ]; then
+        echo "Ошибка: Невозможно записать в файл $path" >&2
+        exit 1
+    fi
+}
