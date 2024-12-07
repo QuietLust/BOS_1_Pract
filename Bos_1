@@ -36,21 +36,6 @@ list_processes() {
     ps -e -o pid,comm | sort -n
 }
 
-# Функция для проверки доступа к пути
-check_path() {
-    local path=$1
-    if [ ! -e "$path" ]; then
-        touch "$path"
-    fi
-    if [ ! -w "$path" ]; then
-        echo "Ошибка записи в файл $path" >&2
-        if [ -n "\$ERROR_FILE" ]; then
-            echo "Ошибка записи в файл \$path" >> "\$ERROR_FILE"
-        fi
-        exit 1
-    fi
-}
-
 # Обработка аргументов командной строки
 TEMP=$(getopt -o uphl:e:c --long users,processes,help,log:,errors:check -n 'SysInfoHelper.sh' -- "$@")
 if [ $? != 0 ]; then
